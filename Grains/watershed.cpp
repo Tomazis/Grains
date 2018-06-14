@@ -3,7 +3,11 @@
 #include <opencv/cv.hpp>
 using namespace std;
 
-void wshed_test_1(QString path, int color, int color_2, int& quantity, vector<double>& lenght, vector<double>& width, vector<double>& area)
+
+//Combination of 2 codes from sites:
+//https://qiita.com/ysdyt/items/5972c9520acf6a094d90
+//http://cvl-robot.hateblo.jp/entry/2014/09/18/143814
+void wshed(QString path, int color, int color_2, int& quantity, vector<double>& lenght, vector<double>& width, vector<double>& area)
 {  
     cv::Mat m_src;
     m_src = cv::imread(path.toStdString().c_str());
@@ -18,11 +22,10 @@ void wshed_test_1(QString path, int color, int color_2, int& quantity, vector<do
                 1, -8, 1,
                 1,  1, 1);
        cv::Mat imgLaplacian;
-        cv::Mat sharp = channels[1]; // copy source image to another temporary one
+        cv::Mat sharp = channels[1];
         cv::filter2D(sharp, imgLaplacian, CV_32F, kernel);
         channels[1].convertTo(sharp, CV_32F);
         cv::Mat imgResult = sharp - imgLaplacian;
-        // convert back to 8bits gray scale
         imgResult.convertTo(imgResult, CV_8UC3);
         imgLaplacian.convertTo(imgLaplacian, CV_8UC3);
 
@@ -66,9 +69,6 @@ void wshed_test_1(QString path, int color, int color_2, int& quantity, vector<do
         cv::Mat unknown, sure_fg_uc1;
         sure_fg.convertTo(sure_fg_uc1, CV_8UC1);
         cv::subtract(sure_bg, sure_fg_uc1, unknown);
-//        cv::namedWindow("unknown",cv::WINDOW_NORMAL);
-//        cv::resizeWindow("unknown" ,800,800);
-//        cv::imshow("unknown", unknown);
 
         int compCount = 0;
         vector<vector<cv::Point> > contours;
@@ -93,8 +93,6 @@ void wshed_test_1(QString path, int color, int color_2, int& quantity, vector<do
             }
 
         watershed( m_src, markers );
-     //   cv::Mat wshed(markers.size(), CV_8UC3);
-
 
         for(int i = 0; i < markers.rows; i++ ){
                 for(int j = 0; j < markers.cols; j++ )
@@ -114,12 +112,6 @@ void wshed_test_1(QString path, int color, int color_2, int& quantity, vector<do
             area.push_back(cv::contourArea(contours[i])*PIXEL_SIZE*PIXEL_SIZE);
             quantity++;
         }
-//        cv::namedWindow("Mark",cv::WINDOW_NORMAL);
-//        cv::resizeWindow("Mark" ,800,800);
-//        cv::imshow("Mark", m_src);
-//        cv::cvtColor(m_src, m_src,CV_BGR2RGB);
-//        QImage tmp((const uchar *) m_src.data, m_src.cols, m_src.rows, m_src.step, QImage::Format_RGB888);
-       // tmp.bits();
 
         cv::imwrite("result.png", m_src);
         return;

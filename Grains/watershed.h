@@ -6,6 +6,6 @@
 
 #define PIXEL_SIZE 0.265
 
-void wshed_test_1(QString path,int color, int color_2, int& quantity, std::vector<double>& lenght, std::vector<double>& width, std::vector<double>& area);
+void wshed(QString path,int color, int color_2, int& quantity, std::vector<double>& lenght, std::vector<double>& width, std::vector<double>& area);
 
 #endif // WATERSHED_H

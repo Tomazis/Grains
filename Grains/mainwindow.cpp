@@ -32,7 +32,7 @@ void MainWindow::on_pushButton_clicked()
     std::vector<double> lenght;
     std::vector<double> width;
     std::vector<double> area;
-    wshed_test_1(ui->label->text(),ui->spinBox->value(),ui->spinBox_2->value(), quantity, lenght, width, area);
+    wshed(ui->label->text(),ui->spinBox->value(),ui->spinBox_2->value(), quantity, lenght, width, area);
     ui->label_2->setText("Quantity: " +QString::number(quantity));
     addRows(quantity);
 
@@ -44,7 +44,6 @@ void MainWindow::on_pushButton_clicked()
     QImage img("result.png");
     pixmap = new QGraphicsPixmapItem(QPixmap::fromImage(img));
     scene->addItem(pixmap);
-  //  ui->graphicsView->show();
 }
 
 void MainWindow::on_pushButton_2_clicked()
